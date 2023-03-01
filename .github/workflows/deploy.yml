@@ -11,7 +11,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: aufdenpunkt/python-safety-check
+      - uses: aufdenpunkt/python-safety-check@master
 
       - name: Deploy
         env:
