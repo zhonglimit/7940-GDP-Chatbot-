@@ -9,23 +9,6 @@ import redis
 # import configparser
 import os
 
-from flask import Flask , render_template , request
-import joblib
-
-
-app = Flask(__name__)
-@app.route("/", methods = ["GET" , "POST"])
-def index():
-    if request.method == "GET":
-    #     rates = float(request.form.get("rates"))
-    #     model = joblib.load("regression.jl")
-    #     r = model.predict([[rates]])
-    #     return(render_template("index.html", result = r))
-    # else:        
-        return(render_template("index.html", result = "Waiting"))
-
-
-
 global redis1
 
 def main():
@@ -103,4 +86,3 @@ def hello(update: Update, context: CallbackContext) -> None:
 
 if __name__ == '__main__':
     main()
-    app.run()

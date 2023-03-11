@@ -2,5 +2,3 @@ telegram
 python-telegram-bot==13.7
 configparser
 redis
-flask
-joblib
