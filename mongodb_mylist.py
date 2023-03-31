@@ -1,9 +1,21 @@
 import pymongo
 from telegram.ext import CallbackContext
 from telegram import Update
+import configparser
 
-# Connect to the MongoDB database
-client = pymongo.MongoClient("mongodb://localhost:27017/")
+# Connect to the local MongoDB database
+# client = pymongo.MongoClient("mongodb://localhost:27017/")
+# db_chatbot = client["db_chatbot"]
+# collection = db_chatbot["reviews"]
+
+# Connect to the  MongoDB Altas
+config = configparser.ConfigParser()
+config.read('config.ini')
+username = config['MongoDB']['KAY']
+password = config['MongoDB']['PASSWORD']
+cluster = config['MongoDB']['CLUSTER']
+uri = 'mongodb+srv://' + username + ':' + password + '@' + cluster + '/?retryWrites=true&w=majority'
+client = pymongo.MongoClient(uri)
 db_chatbot = client["db_chatbot"]
 collection = db_chatbot["reviews"]
 

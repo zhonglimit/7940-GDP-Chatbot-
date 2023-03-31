@@ -2,13 +2,12 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext, CallbackQueryHandler
 from OMDB import get_movie_info
-from mongodb import button_click
+from mongodb_button_click import button_click
+from mongodb_mylist import mylist
 # The messageHandler is used for all message updates
 import configparser
 import logging
-import redis
-# import configparser
-import os
+
 
 global redis1
 
@@ -19,6 +18,7 @@ def main():
     config.read('config.ini')
     updater = Updater(token=(config['TELEGRAM']['ACCESS_TOKEN']),
                       use_context=True)
+    
 
     # updater = Updater(
     #     token=(os.environ['ACCESS_TOKEN']),
@@ -26,15 +26,6 @@ def main():
     #     )
     dispatcher = updater.dispatcher
 
-    global redis1
-    redis1 = redis.Redis(host=(config['REDIS']['HOST']),
-                         password=(config['REDIS']['PASSWORD']),
-                         port=(config['REDIS']['REDISPORT']))
-    # redis1 = redis.Redis(
-    #     host=(os.environ['HOST']),
-    #     password=(os.environ['PASSWORD']),
-    #     port=(os.environ['REDISPORT'])
-    #     )
 
     # You can set this logging module, so you will know when and why things do not work as expected
     logging.basicConfig(
@@ -77,15 +68,16 @@ def search_movie(update: Update, context: CallbackContext) -> None:
         message_text = ""
 
         if movie_info:
-            rating_string = f"IMDb Rating: {movie_info['imdbRating']}\n"
+            rating_string = f"IMDb Rating {movie_info['imdbRating']}\n"
             for rating in movie_info['Ratings']:
-                rating_string += f"\t{rating['Source']}: {rating['Value']}\n"
+                rating_string += f"\t{rating['Source']} rating is {rating['Value']}\n"
 
             message_text = (
-                f"{movie_info['Title']} ({movie_info['Year']}):\n\n" +
+                f"Title:{movie_info['Title']} ({movie_info['Year']})\n\n" +
                 f"Plot:\n\t\t{movie_info['Plot']}\n\n" +
                 f"Starring:\n{movie_info['Actors']}\n\n" +
                 f"Ratings:\n\t{rating_string}")
+            
         else:
             message_text = f"Movie '{movie_name}' not found. Check for typos and try again."
     except (IndexError, ValueError, Exception):
@@ -93,32 +85,19 @@ def search_movie(update: Update, context: CallbackContext) -> None:
             'Pleasee to follow the usage: /search <movie_name>')
 
     keyboard = InlineKeyboardMarkup(inline_keyboard=[[
-        InlineKeyboardButton(text='Favourite', callback_data='add')
+        InlineKeyboardButton(text='Favourite', callback_data = 'add')
     ]])
+
+
     update.message.reply_text(message_text, reply_markup=keyboard)
 
 
 
 
 
-# This method is used to store the movie info to the database
-def add(update: Update, context: CallbackContext) -> None:
-
-    global redis1
-    logging.info(update)
-    # 调用写入数据库函数
 
 
-#This method is used to show the favourite movie list to the user.
-def mylist(update: Update, context: CallbackContext) -> None:
-    """Send a message when the command /add is issued."""
-    try:
-        logging.info(update)
 
-        # get_movie_info()
-
-    except (IndexError, ValueError):
-        update.message.reply_text('usage: /add <keyword>')
 
 
 if __name__ == '__main__':
