@@ -1,14 +1,24 @@
 import pymongo
 import logging
-import json
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CallbackQueryHandler
+import configparser
 
-# Connect to the MongoDB database
-client = pymongo.MongoClient("mongodb://localhost:27017/")
+# Connect to the local MongoDB database
+#client = pymongo.MongoClient("mongodb://localhost:27017/")
+#db_chatbot = client["db_chatbot"]
+#collection = db_chatbot["reviews"]
+
+# Connect to the  MongoDB Altas
+config = configparser.ConfigParser()
+config.read('config.ini')
+username = config['MongoDB']['KAY']
+password = config['MongoDB']['PASSWORD']
+cluster = config['MongoDB']['CLUSTER']
+uri = 'mongodb+srv://' + username + ':' + password + '@' + cluster + '/?retryWrites=true&w=majority'
+client = pymongo.MongoClient(uri)
 db_chatbot = client["db_chatbot"]
 collection = db_chatbot["reviews"]
-
 
 # Define the function to handle button clicks
 def button_click(update, context) -> None:
