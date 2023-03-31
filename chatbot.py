@@ -2,28 +2,24 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext, CallbackQueryHandler
 from OMDB import get_movie_info
-from mongodb_button_click import button_click
-from mongodb_mylist import mylist
+from mongodb import button_click, mylist
 # The messageHandler is used for all message updates
 import configparser
 import logging
-
-
-global redis1
-
+import os
 
 def main():
     # Load your token and create an Updater for your Bot
-    config = configparser.ConfigParser()
-    config.read('config.ini')
-    updater = Updater(token=(config['TELEGRAM']['ACCESS_TOKEN']),
-                      use_context=True)
-    
+    # config = configparser.ConfigParser()
+    # config.read('config.ini')
+    # updater = Updater(token=(config['TELEGRAM']['ACCESS_TOKEN']),
+    #                   use_context=True)
 
-    # updater = Updater(
-    #     token=(os.environ['ACCESS_TOKEN']),
-    #     use_context=True
-    #     )
+    updater = Updater(
+        token=(os.environ['ACCESS_TOKEN']),
+        use_context=True
+        )
+    
     dispatcher = updater.dispatcher
 
 

@@ -1,11 +1,14 @@
 FROM python
 COPY chatbot.py .
+COPY mongodb.py .
+COPY OMDB.py .
 COPY requirements.txt .
 RUN pip install pip update
 RUN pip install -r requirements.txt
 ENV ACCESS_TOKEN=6125589283:AAExZVlNEXHDgtEKZWKitNPiX1jIjUvPRvs
-ENV HOST="redis-13544.c54.ap-northeast-1-2.ec2.cloud.redislabs.com"
-ENV PASSWORD="jpKShg6YJRQFpza9Nh0UQGBN1Du9AcZS"
-ENV REDISPORT=13544
+ENV API_KEY=5e6f7556
+ENV KEY=7940chatbot
+ENV PASSWORD=O0kd7ozHMnmvmPQZ
+ENV CLUSTER=cluster0.4tbcuza.mongodb.net
 CMD python chatbot.py
 
