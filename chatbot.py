@@ -2,6 +2,7 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext, CallbackQueryHandler
 from OMDB import get_movie_info
+from mongodb import button_click
 # The messageHandler is used for all message updates
 import configparser
 import logging
@@ -46,11 +47,13 @@ def main():
 
     # on different commands - answer in Telegram
     dispatcher.add_handler(CommandHandler("search", search_movie))
-    dispatcher.add_handler(CallbackQueryHandler(add))
+    dispatcher.add_handler(CallbackQueryHandler(button_click))
     dispatcher.add_handler(CommandHandler("mylist", mylist))
     # To start the bot:
     updater.start_polling()
     updater.idle()
+
+
 
 
 #  /hello Kevin , it will reply Good day, Kevin!
@@ -93,6 +96,9 @@ def search_movie(update: Update, context: CallbackContext) -> None:
         InlineKeyboardButton(text='Favourite', callback_data='add')
     ]])
     update.message.reply_text(message_text, reply_markup=keyboard)
+
+
+
 
 
 # This method is used to store the movie info to the database
